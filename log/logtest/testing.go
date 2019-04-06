@@ -20,6 +20,9 @@ func GenerateKEYVALs(tb testing.TB, n int) []interface{} {
 	return kvs
 }
 
+// StressTestLogger exercises the logger returned by factory using multiple Go routines.
+//
+// Each Go routine writes nMSGs before it terminates.
 func StressTestLogger(tb testing.TB, factory func() log.Logger, nGoRoutines, nMSGs int) {
 	if nGoRoutines < 1 {
 		tb.Fatalf("expected nGoRoutines >= 1; got %d", nGoRoutines)
