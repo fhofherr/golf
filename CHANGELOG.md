@@ -11,3 +11,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 * [README](README.md) detailing project goals and initial features.
+* `log.Logger` interface. `log.Logger` has the same basic contract as
+  [GoKit's `log.Logger`](https://godoc.org/github.com/go-kit/kit/log#Logger)
+  interface.
+* A basic logger that uses the passed writer for logging. It is intended
+  for cases in which such a basic logger is all you need. Most callers
+  should use one of the wrappers around other logging libraries (once
+  they are ready).
