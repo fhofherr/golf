@@ -57,11 +57,26 @@ func TestWriterLogger_Log_FormatterError(t *testing.T) {
 }
 
 func BenchmarkWriterLogger_Log(b *testing.B) {
-	logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
-	for i := 0; i < b.N; i++ {
-		// TODO generate a fixed amount of key-value pairs before executing benchmark
-		logger.Log("key1", "value1", "key2", 4711)
+	benchmarks := []struct {
+		name string
+		nkvs int
+	}{
+		{"1 key value pair", 1},
+		{"10 key value pairs", 10},
+		{"100 key value pairs", 100},
+		{"1000 key value pairs", 1000},
 	}
+	for _, bm := range benchmarks {
+		bm := bm
+		b.Run(bm.name, func(b *testing.B) {
+			logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
+			kvs := log.GenerateKEYVALs(bm.nkvs)
+			for i := 0; i < b.N; i++ {
+				logger.Log(kvs...)
+			}
+		})
+	}
+
 }
 
 type errorWriter struct {
