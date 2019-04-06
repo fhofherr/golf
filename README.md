@@ -5,6 +5,9 @@ structured loggers heavily inspired by [GoKit](https://gokit.io/)'s
 [`Logger`](https://godoc.org/github.com/go-kit/kit/log#Logger)
 interface.
 
+[![GoDoc](https://godoc.org/github.com/fhofherr/golf?status.svg)](https://godoc.org/github.com/fhofherr/golf)
+[![Go Report Card](https://goreportcard.com/badge/github.com/fhofherr/golf)](https://goreportcard.com/report/github.com/fhofherr/golf)
+
 ## Project Goals
 
 * API compatible with GoKit `Logger`.
