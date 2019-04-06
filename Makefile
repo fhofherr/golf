@@ -5,6 +5,9 @@
 test: ## Execute all tests and show a coverage summary
 	go test -coverprofile=coverage.out ./...
 
+race: ## Execute all tests with race detector enabled
+	go test -race ./...
+
 .PHONY: coverageHTML
 coverageHTML: test ## Create HTML coverage report
 	go tool cover -html=coverage.out

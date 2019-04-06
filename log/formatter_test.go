@@ -33,10 +33,10 @@ var formatterTests = []formatterTestInput{
 func TestPlainTextFormatter(t *testing.T) {
 	expectations := map[string]string{
 		"empty kvs":             "",
-		"single key value pair": "key=value",
-		"two key value pairs":   "key1=value1, key2=value2",
-		"missing value":         "key=error: missing value",
-		"odd number of kvs":     "key1=value1, key2=error: missing value",
+		"single key value pair": "key=value\n",
+		"two key value pairs":   "key1=value1, key2=value2\n",
+		"missing value":         "key=error: missing value\n",
+		"odd number of kvs":     "key1=value1, key2=error: missing value\n",
 	}
 	exerciseFormatter(t, log.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
 		assert.Equal(t, expected, actual)

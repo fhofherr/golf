@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf/log"
+	"github.com/fhofherr/golf/log/logtest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,28 +32,28 @@ func TestContextualLogger(t *testing.T) {
 			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1", "value1"},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key1=value1, key2=value2",
+			expected: "key1=value1, key2=value2\n",
 		},
 		{
 			name:     "missing context value",
 			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1"},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key1=error: missing value, key2=value2",
+			expected: "key1=error: missing value, key2=value2\n",
 		},
 		{
 			name:     "empty context kvs",
 			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key2=value2",
+			expected: "key2=value2\n",
 		},
 		{
 			name:     "empty kvs",
 			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1", "value1"},
 			kvs:      []interface{}{},
-			expected: "key1=value1",
+			expected: "key1=value1\n",
 		},
 		{
 			name: "nested contextual loggers",
@@ -62,7 +63,7 @@ func TestContextualLogger(t *testing.T) {
 			},
 			ctxkvs:   []interface{}{"key2", "value2"},
 			kvs:      []interface{}{"key3", "value3"},
-			expected: "key1=value1, key2=value2, key3=value3",
+			expected: "key1=value1, key2=value2, key3=value3\n",
 		},
 	}
 	for _, tt := range tests {
@@ -92,8 +93,8 @@ func BenchmarkContextualLogger_Log(b *testing.B) {
 	for _, bm := range benchmarks {
 		bm := bm
 		b.Run(bm.name, func(b *testing.B) {
-			ctxkvs := log.GenerateKEYVALs(bm.nctxkvs)
-			kvs := log.GenerateKEYVALs(bm.nkvs)
+			ctxkvs := logtest.GenerateKEYVALs(b, bm.nctxkvs)
+			kvs := logtest.GenerateKEYVALs(b, bm.nkvs)
 			logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
 			logger = log.With(logger, ctxkvs...)
 			for i := 0; i < b.N; i++ {
@@ -120,9 +121,9 @@ func BenchmarkNestedContextualLogger_Log(b *testing.B) {
 	for _, bm := range benchmarks {
 		bm := bm
 		b.Run(bm.name, func(b *testing.B) {
-			ctx1kvs := log.GenerateKEYVALs(bm.nctx1kvs)
-			ctx2kvs := log.GenerateKEYVALs(bm.nctx2kvs)
-			kvs := log.GenerateKEYVALs(bm.nkvs)
+			ctx1kvs := logtest.GenerateKEYVALs(b, bm.nctx1kvs)
+			ctx2kvs := logtest.GenerateKEYVALs(b, bm.nctx2kvs)
+			kvs := logtest.GenerateKEYVALs(b, bm.nkvs)
 			logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
 			logger = log.With(logger, ctx1kvs...)
 			logger = log.With(logger, ctx2kvs...)
