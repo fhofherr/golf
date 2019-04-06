@@ -1,4 +1,4 @@
-package golf
+package log
 
 // Logger is the fundamental interface for all log operations.
 //
