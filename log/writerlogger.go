@@ -28,6 +28,9 @@ func NewWriterLogger(w io.Writer, f Formatter) Logger {
 // Log creates a log entry from kvs and writes it to the basic logger's writer.
 func (l *writerLogger) Log(kvs ...interface{}) error {
 	bs, err := l.f(kvs)
+	if err != nil {
+		return fmt.Errorf("format log entry: %v", err)
+	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	_, err = l.w.Write(bs)
