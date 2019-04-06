@@ -10,8 +10,8 @@ import (
 
 // GenerateKEYVALs generates a fixed amount of key value pairs.
 func GenerateKEYVALs(tb testing.TB, n int) []interface{} {
-	if n < 1 {
-		tb.Fatalf("expected n >= 1; got %d", n)
+	if n < 0 {
+		tb.Fatalf("expected n >= 0; got %d", n)
 	}
 	var kvs []interface{}
 	for i := 0; i < n; i++ {
