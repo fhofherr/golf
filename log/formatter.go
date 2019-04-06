@@ -15,6 +15,9 @@ type Formatter func([]interface{}) ([]byte, error)
 // PlainTextFormatter converts the passed kvs to strings and joins them
 // separated by a coma and a space.
 func PlainTextFormatter(kvs []interface{}) ([]byte, error) {
+	if len(kvs) == 0 {
+		return nil, nil
+	}
 	b := bytes.Buffer{}
 	n := len(kvs)
 	if n%2 != 0 {
@@ -34,6 +37,7 @@ func PlainTextFormatter(kvs []interface{}) ([]byte, error) {
 		s := fmt.Sprintf("%v=error: missing value", kvs[n])
 		b.Write([]byte(s))
 	}
+	b.Write([]byte("\n"))
 	return b.Bytes(), nil
 }
 
