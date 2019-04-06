@@ -37,6 +37,7 @@ func PlainTextFormatter(kvs []interface{}) ([]byte, error) {
 	return b.Bytes(), nil
 }
 
+// JSONFormatter marshals the passed key-value pairs into a JSON object.
 func JSONFormatter(kvs []interface{}) ([]byte, error) {
 	var (
 		entry map[string]interface{}
