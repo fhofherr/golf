@@ -47,6 +47,15 @@ func TestWriterLogger_Log_WriterError(t *testing.T) {
 	assert.EqualError(t, actual, fmt.Sprintf("write log entry: %v", err))
 }
 
+func TestWriterLogger_Log_FormatterError(t *testing.T) {
+	err := errors.New("some error")
+	logger := log.NewWriterLogger(ioutil.Discard, func([]interface{}) ([]byte, error) {
+		return nil, err
+	})
+	actual := logger.Log("key", "value")
+	assert.EqualError(t, actual, fmt.Sprintf("format log entry: %v", err))
+}
+
 func BenchmarkWriterLogger_Log(b *testing.B) {
 	logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
 	for i := 0; i < b.N; i++ {
