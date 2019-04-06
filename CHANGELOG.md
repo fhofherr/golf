@@ -18,3 +18,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   for cases in which such a basic logger is all you need. Most callers
   should use one of the wrappers around other logging libraries (once
   they are ready).
+* Enable contextual logging by providing the `With` function. To avoid
+  excessive wrapping of contextual loggers the `Wither` interface can be
+  implemented by loggers who know how to add additional context values
+  to themselves.
