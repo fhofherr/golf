@@ -9,4 +9,6 @@ jobs:
     working_directory: /go/src/github.com/fhofherr/golf
     steps:
       - checkout
+      - run: go get github.com/mattn/goveralls
       - run: make test
+      - run: /go/bin/goveralls -coverprofile=coverage.out -service=circle-ci -repotoken=$COVERALLS_REPO_TOKEN

@@ -9,6 +9,7 @@ interface.
 [![Go Report Card](https://goreportcard.com/badge/github.com/fhofherr/golf)](https://goreportcard.com/report/github.com/fhofherr/golf)
 [![Build Status](https://travis-ci.org/fhofherr/golf.svg?branch=master)](https://travis-ci.org/fhofherr/golf)
 [![CircleCI](https://circleci.com/gh/fhofherr/golf.svg?style=svg)](https://circleci.com/gh/fhofherr/golf)
+[![Coverage Status](https://coveralls.io/repos/github/fhofherr/golf/badge.svg?branch=master)](https://coveralls.io/github/fhofherr/golf?branch=master)
 
 ## Project Goals
 

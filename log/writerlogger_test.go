@@ -57,21 +57,36 @@ func TestWriterLogger_Log_FormatterError(t *testing.T) {
 	assert.EqualError(t, actual, fmt.Sprintf("format log entry: %v", err))
 }
 
+// BenchmarkWriterLogger_Log benchmarks the time it takes for preparing
+// a log entry and writing it to the Writer.
+//
+// In order to prepare a log entry Log has to iterate over all key-value pairs,
+// therefore the time it takes to log should increase with the number of
+// key-value pairs. Another important source of overhead is the used formatter.
+// BenchmarkWriterLogger_Log thus uses different formatters with the same number
+// of key-value pairs.
 func BenchmarkWriterLogger_Log(b *testing.B) {
 	benchmarks := []struct {
-		name string
-		nkvs int
+		name      string
+		nkvs      int
+		formatter log.Formatter
 	}{
-		{"1 key value pair", 1},
-		{"10 key value pairs", 10},
-		{"100 key value pairs", 100},
-		{"1000 key value pairs", 1000},
+		{"1 key value pair - plain text", 1, log.PlainTextFormatter},
+		{"10 key value pairs - plain text", 10, log.PlainTextFormatter},
+		{"100 key value pairs - plain text", 100, log.PlainTextFormatter},
+		{"1000 key value pairs - plain text", 1000, log.PlainTextFormatter},
+		{"1 key value pair - JSON", 1, log.JSONFormatter},
+		{"10 key value pairs - JSON", 10, log.JSONFormatter},
+		{"100 key value pairs - JSON", 100, log.JSONFormatter},
+		{"1000 key value pairs - JSON", 1000, log.JSONFormatter},
 	}
 	for _, bm := range benchmarks {
 		bm := bm
 		b.Run(bm.name, func(b *testing.B) {
-			logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
+			logger := log.NewWriterLogger(ioutil.Discard, bm.formatter)
 			kvs := logtest.GenerateKEYVALs(b, bm.nkvs)
+
+			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
 				logger.Log(kvs...)
 			}
