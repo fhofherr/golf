@@ -22,3 +22,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   excessive wrapping of contextual loggers the `Wither` interface can be
   implemented by loggers who know how to add additional context values
   to themselves.
+* Package [golfstdblib](https://godoc.org/github.com/fhofherr/golf/golfstdlib)
+  Adapter for the Go standard library logger.
