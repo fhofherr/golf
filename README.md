@@ -18,7 +18,7 @@ interface.
 * Easy implementation of adapters for various loggers.
   * [stdlib](https://godoc.org/log): included in main repository
   * [logrus](https://github.com/Sirupsen/logrus): separate repository
-  * [zap](https://github.com/uber-go/zap): separate repository
+  * [zap](https://github.com/uber-go/zap): [separate repository](https://github.com/fhofherr/golf-zap)
 
 ## License
 
