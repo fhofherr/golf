@@ -1,23 +1,21 @@
-package golfstdlib
+package log
 
 import (
 	"fmt"
 	stdliblog "log"
-
-	"github.com/fhofherr/golf/log"
 )
 
 type stdlibAdapter struct {
 	logger *stdliblog.Logger
-	format log.Formatter
+	format Formatter
 }
 
-// New instantiates golf's standard library logger adapter using the passed
+// NewStdlib instantiates golf's standard library logger adapter using the passed
 // logger. Log entries are formatted using the passed formatter. If f is nil
 // log.PlainTextFormatter is used.
-func New(l *stdliblog.Logger, f log.Formatter) log.Logger {
+func NewStdlib(l *stdliblog.Logger, f Formatter) Logger {
 	if f == nil {
-		f = log.PlainTextFormatter
+		f = PlainTextFormatter
 	}
 	return stdlibAdapter{
 		logger: l,
