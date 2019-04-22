@@ -43,7 +43,7 @@ func TestWriterLogger_Log(t *testing.T) {
 
 func TestWriterLogger_Log_WriterError(t *testing.T) {
 	err := errors.New("some error")
-	logger := log.NewWriterLogger(errorWriter{Err: err}, log.PlainTextFormatter)
+	logger := log.NewWriterLogger(log.ErrorWriter{Err: err}, log.PlainTextFormatter)
 	actual := logger.Log("key", "value")
 	assert.EqualError(t, actual, fmt.Sprintf("write log entry: %v", err))
 }
@@ -93,12 +93,4 @@ func BenchmarkWriterLogger_Log(b *testing.B) {
 		})
 	}
 
-}
-
-type errorWriter struct {
-	Err error
-}
-
-func (w errorWriter) Write(p []byte) (n int, err error) {
-	return 0, w.Err
 }
