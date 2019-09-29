@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/fhofherr/golf/log"
-	"github.com/fhofherr/golf/log/logtest"
 )
 
 var stressTests = []struct {
@@ -42,7 +41,7 @@ func runLoggerStressTests(t *testing.T, factory func() log.Logger) {
 		tt := tt
 		name := fmt.Sprintf("%d Go routines with %d messages each", tt.nGoRoutines, tt.nMessages)
 		t.Run(name, func(t *testing.T) {
-			logtest.StressTestLogger(t, factory, tt.nGoRoutines, tt.nMessages)
+			log.StressTestLogger(t, factory, tt.nGoRoutines, tt.nMessages)
 		})
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf/log"
-	"github.com/fhofherr/golf/log/logtest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -114,10 +113,10 @@ func BenchmarkContextualLogger_Log(b *testing.B) {
 		b.Run(bm.name, func(b *testing.B) {
 			logger := bm.logger
 			if bm.nkvs > 1 {
-				ctxkvs := logtest.GenerateKEYVALs(b, bm.nkvs-1)
+				ctxkvs := log.GenerateKEYVALs(b, bm.nkvs-1)
 				logger = log.With(logger, ctxkvs...)
 			}
-			kvs := logtest.GenerateKEYVALs(b, 1)
+			kvs := log.GenerateKEYVALs(b, 1)
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
 				logger.Log(kvs...)

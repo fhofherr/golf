@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf/log"
-	"github.com/fhofherr/golf/log/logtest"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -84,7 +83,7 @@ func BenchmarkWriterLogger_Log(b *testing.B) {
 		bm := bm
 		b.Run(bm.name, func(b *testing.B) {
 			logger := log.NewWriterLogger(ioutil.Discard, bm.formatter)
-			kvs := logtest.GenerateKEYVALs(b, bm.nkvs)
+			kvs := log.GenerateKEYVALs(b, bm.nkvs)
 
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
