@@ -10,6 +10,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+* `log.TestLogger` which stores all log entries in an internal data structure
+  and allows to make assertions over the log.
 * `.projections.json` file. See
   [vim-projectionist](https://github.com/tpope/vim-projectionist) for
   details.
