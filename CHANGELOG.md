@@ -8,6 +8,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2019-10-05
+
 ### Added
 
 * `log.TestLogger` which stores all log entries in an internal data structure
@@ -17,6 +19,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   details.
 * `.editorconfig` file. See [editorconfig](https://editorconfig.org/)
   for details.
+
+### Changed
+
+* Update Go version to 1.13.
 
 ### Removed
 
@@ -42,5 +48,6 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   to themselves.
 * Adapter for the Go standard library logger.
 
-[Unreleased]: https://github.com/fhofherr/golf/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/fhofherr/golf/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/fhofherr/golf/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/fhofherr/golf/releases/tag/v0.1.0
