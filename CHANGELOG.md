@@ -18,6 +18,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 * `.editorconfig` file. See [editorconfig](https://editorconfig.org/)
   for details.
 
+### Removed
+
+* `log.NewWriterLogger`: applications with a very basic logging needs
+  can just use the stdlib logger. An additional custom logger is just
+  redundant.
+
 ## [0.1.0] - 2019-04-22
 
 ### Added

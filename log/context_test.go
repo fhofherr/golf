@@ -1,79 +1,96 @@
+//nolint: goconst, funlen
 package log_test
 
 import (
 	"fmt"
-	"io"
-	"io/ioutil"
-	"strings"
 	"testing"
 
 	"github.com/fhofherr/golf/log"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestContextualLogger(t *testing.T) {
 	tests := []struct {
 		name     string
-		factory  func(io.Writer, log.Formatter) log.Logger
+		factory  func(*log.TestLogger) log.Logger
 		ctxkvs   []interface{}
 		kvs      []interface{}
-		expected string
+		nEntries int
+		pred     func(log.TestLogEntry) bool
 	}{
 		{
 			name: "nil logger",
-			factory: func(io.Writer, log.Formatter) log.Logger {
+			factory: func(*log.TestLogger) log.Logger {
 				return nil
 			},
 			ctxkvs: []interface{}{"key1", "value1"},
 			kvs:    []interface{}{"key2", "value2"},
+			// All entries would match the predicate, but we expect no matching
+			// entries.
+			pred: func(log.TestLogEntry) bool {
+				return true
+			},
 		},
 		{
 			name:     "non-nil logger",
-			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1", "value1"},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key1=value1, key2=value2\n",
+			nEntries: 1,
+			pred: func(e log.TestLogEntry) bool {
+				return e["key1"] == "value1" && e["key2"] == "value2"
+			},
 		},
 		{
 			name:     "missing context value",
-			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1"},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key1=error: missing value, key2=value2\n",
+			nEntries: 1,
+			pred: func(e log.TestLogEntry) bool {
+				return e["key1"] == "error: missing value" && e["key2"] == "value2"
+			},
 		},
 		{
 			name:     "empty context kvs",
-			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{},
 			kvs:      []interface{}{"key2", "value2"},
-			expected: "key2=value2\n",
+			nEntries: 1,
+			pred: func(e log.TestLogEntry) bool {
+				return e["key2"] == "value2"
+			},
 		},
 		{
 			name:     "empty kvs",
-			factory:  log.NewWriterLogger,
 			ctxkvs:   []interface{}{"key1", "value1"},
 			kvs:      []interface{}{},
-			expected: "key1=value1\n",
+			nEntries: 1,
+			pred: func(e log.TestLogEntry) bool {
+				return e["key1"] == "value1"
+			},
 		},
 		{
 			name: "nested contextual loggers",
-			factory: func(w io.Writer, f log.Formatter) log.Logger {
-				logger := log.NewWriterLogger(w, f)
-				return log.With(logger, "key1", "value1")
+			factory: func(tl *log.TestLogger) log.Logger {
+				return log.With(tl, "key1", "value1")
 			},
 			ctxkvs:   []interface{}{"key2", "value2"},
 			kvs:      []interface{}{"key3", "value3"},
-			expected: "key1=value1, key2=value2, key3=value3\n",
+			nEntries: 1,
+			pred: func(e log.TestLogEntry) bool {
+				return e["key1"] == "value1" && e["key2"] == "value2" && e["key3"] == "value3"
+			},
 		},
 	}
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			w := &strings.Builder{}
-			logger := tt.factory(w, log.PlainTextFormatter)
-			logger = log.With(logger, tt.ctxkvs...)
+			if tt.factory == nil {
+				tt.factory = func(tl *log.TestLogger) log.Logger {
+					return tl
+				}
+			}
+			tl := &log.TestLogger{}
+			logger := log.With(tt.factory(tl), tt.ctxkvs...)
 			log.Log(logger, tt.kvs...)
-			assert.Equal(t, tt.expected, w.String())
+			tl.AssertHasMatchingLogEntries(t, tt.nEntries, tt.pred)
 		})
 	}
 }
@@ -97,16 +114,11 @@ func BenchmarkContextualLogger_Log(b *testing.B) {
 		{"100 key value pairs - nopLogger", 100, log.NewNOPLogger()},
 		{"1000 key value pairs - nopLogger", 100, log.NewNOPLogger()},
 
-		{"1 key value pair - writer logger", 1,
-			log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)},
-		{"2 key value pairs - writer logger", 2,
-			log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)},
-		{"10 key value pairs - writer logger", 10,
-			log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)},
-		{"100 key value pairs - writer logger", 100,
-			log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)},
-		{"1000 key value pairs - writer logger", 1000,
-			log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)},
+		{"1 key value pair - writer logger", 1, &log.TestLogger{}},
+		{"2 key value pairs - writer logger", 2, &log.TestLogger{}},
+		{"10 key value pairs - writer logger", 10, &log.TestLogger{}},
+		{"100 key value pairs - writer logger", 100, &log.TestLogger{}},
+		{"1000 key value pairs - writer logger", 1000, &log.TestLogger{}},
 	}
 	for _, bm := range benchmarks {
 		bm := bm
@@ -119,11 +131,10 @@ func BenchmarkContextualLogger_Log(b *testing.B) {
 			kvs := log.GenerateKEYVALs(b, 1)
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				logger.Log(kvs...)
+				logger.Log(kvs...) // nolint: errcheck
 			}
 		})
 	}
-
 }
 
 // BenchmarkNestedContextualLogger_Log benchmarks the overhead deep nesting
@@ -162,9 +173,8 @@ func BenchmarkNestedContextualLogger_Log(b *testing.B) {
 
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
-				logger.Log(kvs...)
+				logger.Log(kvs...) // nolint: errcheck
 			}
 		})
 	}
-
 }
