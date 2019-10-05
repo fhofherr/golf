@@ -20,9 +20,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
-* `log.NewWriterLogger`: applications with a very basic logging needs
-  can just use the stdlib logger. An additional custom logger is just
-  redundant.
+* `log.NewWriterLogger`: applications with very basic logging needs can
+  just use a wrapped standard library logger. An additional custom
+  logger is just redundant.
 
 ## [0.1.0] - 2019-04-22
 
