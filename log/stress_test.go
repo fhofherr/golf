@@ -2,14 +2,13 @@ package log_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 	"time"
 
 	"github.com/fhofherr/golf/log"
-	"github.com/fhofherr/golf/log/logtest"
 )
 
+// nolint: checknoglobals
 var stressTests = []struct {
 	nGoRoutines int
 	nMessages   int
@@ -23,17 +22,9 @@ var stressTests = []struct {
 }
 
 func TestContextualLogger_Log_StressTest(t *testing.T) {
-	logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
-	logger = log.With(logger, "test type", "contextual logger stress test")
+	logger := log.With(&log.TestLogger{}, "test type", "contextual logger stress test")
 	runLoggerStressTests(t, func() log.Logger {
 		return log.With(logger, "random value", time.Now().Unix())
-	})
-}
-
-func TestWriterLogger_Log_StressTest(t *testing.T) {
-	logger := log.NewWriterLogger(ioutil.Discard, log.PlainTextFormatter)
-	runLoggerStressTests(t, func() log.Logger {
-		return logger
 	})
 }
 
@@ -42,7 +33,7 @@ func runLoggerStressTests(t *testing.T, factory func() log.Logger) {
 		tt := tt
 		name := fmt.Sprintf("%d Go routines with %d messages each", tt.nGoRoutines, tt.nMessages)
 		t.Run(name, func(t *testing.T) {
-			logtest.StressTestLogger(t, factory, tt.nGoRoutines, tt.nMessages)
+			log.StressTestLogger(t, factory, tt.nGoRoutines, tt.nMessages)
 		})
 	}
 }

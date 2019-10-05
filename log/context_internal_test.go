@@ -1,7 +1,6 @@
 package log
 
 import (
-	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,7 +31,7 @@ func TestContextualLogger_Log(t *testing.T) {
 			name: "non-nil logger",
 			logger: contextualLogger{
 				ctxkvs: []interface{}{"key1", "value1"},
-				logger: NewWriterLogger(ioutil.Discard, PlainTextFormatter),
+				logger: &TestLogger{},
 			},
 		},
 	}

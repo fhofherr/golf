@@ -21,7 +21,7 @@ func PlainTextFormatter(kvs []interface{}) ([]byte, error) {
 	b := bytes.Buffer{}
 	n := len(kvs)
 	if n%2 != 0 {
-		n = n - 1
+		n--
 	}
 	for i := 0; i < n; i += 2 {
 		s := fmt.Sprintf("%v=%v", kvs[i], kvs[i+1])

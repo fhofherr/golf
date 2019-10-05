@@ -8,6 +8,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+* `log.TestLogger` which stores all log entries in an internal data structure
+  and allows to make assertions over the log.
+* `.projections.json` file. See
+  [vim-projectionist](https://github.com/tpope/vim-projectionist) for
+  details.
+* `.editorconfig` file. See [editorconfig](https://editorconfig.org/)
+  for details.
+
+### Removed
+
+* `log.NewWriterLogger`: applications with very basic logging needs can
+  just use a wrapped standard library logger. An additional custom
+  logger is just redundant.
+
 ## [0.1.0] - 2019-04-22
 
 ### Added
