@@ -4,6 +4,7 @@
 .PHONY: test
 test: ## Execute all tests and show a coverage summary
 	go test -coverprofile=coverage.out ./...
+	sed -i.bak '/testing\.go/d' coverage.out
 
 race: ## Execute all tests with race detector enabled
 	go test -race ./...
