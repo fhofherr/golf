@@ -18,9 +18,6 @@ TOOLS_GO := tools.go
 TOOLS_DIR := .tools
 TOOLS_BIN_DIR := $(TOOLS_DIR)/bin
 
-.PHONY: tools
-tools: $(TOOLS_BIN_DIR)/toolmgr ## Install all tools
-
 $(TOOLS_BIN_DIR)/toolmgr:
 	GOBIN=$(abspath ./$(TOOLS_BIN_DIR)) $(GO) install github.com/fhofherr/toolmgr
 
@@ -44,6 +41,10 @@ test: .coverage.out ## Run all tests
 .PHONY: coverage-html
 coverage-html: .coverage.out ## Show HTML coverage report
 	$(GO) tool cover -html=$<
+
+.PHONY: coveralls
+coveralls: .coverage.out $(TOOLS_BIN_DIR)/goveralls ## Send coverage data to coveralls.
+	$(TOOLS_BIN_DIR)/goveralls -coverprofile=$< -service=github
 
 .coverage.out: $(GO_FILES)
 	@$(GO) test -race -coverpkg=$(GO_PACKAGES) -covermode=atomic -coverprofile=$@ ./...

@@ -2,3 +2,5 @@
 *.prof
 .coverage.out
 .tools/
+
+dist/
