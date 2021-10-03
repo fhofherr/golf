@@ -1,3 +1,4 @@
 *.bak
 *.prof
-coverage.out
+.coverage.out
+.tools/

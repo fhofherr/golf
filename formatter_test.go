@@ -1,13 +1,13 @@
-package log_test
+package golf_test
 
 import (
 	"testing"
 
-	"github.com/fhofherr/golf/log"
+	"github.com/fhofherr/golf"
 	"github.com/stretchr/testify/assert"
 )
 
-var formatterTests = []formatterTestInput{
+var formatterTests = []formatterTest{
 	{
 		name: "empty kvs",
 		kvs:  []interface{}{},
@@ -38,7 +38,7 @@ func TestPlainTextFormatter(t *testing.T) {
 		"missing value":         "key=error: missing value\n",
 		"odd number of kvs":     "key1=value1, key2=error: missing value\n",
 	}
-	exerciseFormatter(t, log.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
+	exerciseFormatter(t, golf.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
 		assert.Equal(t, expected, actual)
 	})
 }
@@ -51,17 +51,17 @@ func TestJSONFormatter(t *testing.T) {
 		"missing value":         `{"key": "error: missing value"}`,
 		"odd number of kvs":     `{"key1": "value1", "key2": "error: missing value"}`,
 	}
-	exerciseFormatter(t, log.JSONFormatter, expectations, func(t *testing.T, expected, actual string) {
+	exerciseFormatter(t, golf.JSONFormatter, expectations, func(t *testing.T, expected, actual string) {
 		assert.JSONEq(t, expected, actual)
 	})
 }
 
 func TestJSONFormatter_MarshallingError(t *testing.T) {
-	_, err := log.JSONFormatter([]interface{}{"key", log.JSONFormatter})
+	_, err := golf.JSONFormatter([]interface{}{"key", golf.JSONFormatter})
 	assert.Error(t, err)
 }
 
-type formatterTestInput struct {
+type formatterTest struct {
 	name string
 	kvs  []interface{}
 }
@@ -69,9 +69,10 @@ type formatterTestInput struct {
 type formatterAssertion func(*testing.T, string, string)
 
 func exerciseFormatter(
-	t *testing.T, formatter log.Formatter, expectations map[string]string, assertion formatterAssertion,
+	t *testing.T, formatter golf.Formatter, expectations map[string]string, assertion formatterAssertion,
 ) {
 	for _, tt := range formatterTests {
+		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			expected, ok := expectations[tt.name]
 			if !ok {
