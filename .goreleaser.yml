@@ -1,0 +1,26 @@
+---
+project_name: golf
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - skip: true
+
+checksum:
+  algorithm: sha256
+  name_template: 'checksums.txt'
+
+release:
+  github:
+    owner: fhofherr
+    name: golf
+  draft: true
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
