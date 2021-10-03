@@ -6,7 +6,7 @@ structured loggers.
 [![Go Reference](https://pkg.go.dev/badge/github.com/fhofherr/golf.svg)](https://pkg.go.dev/github.com/fhofherr/golf)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fhofherr/golf)](https://goreportcard.com/report/github.com/fhofherr/golf)
 [![Coverage Status](https://coveralls.io/repos/github/fhofherr/golf/badge.svg?branch=main)](https://coveralls.io/github/fhofherr/golf?branch=main)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/fhofherr/golf.svg)
+![GitHub tag (latest SemVer pre-release)](https://img.shields.io/github/v/tag/fhofherr/golf?include_prereleases&sort=semver)
 
 `golf` adheres to semantic versioning. Any breaking changes before version
 1.0 or between major versions are listed under [Breaking
