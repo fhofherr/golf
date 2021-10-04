@@ -1,4 +1,4 @@
-package golf
+package golfstdlib
 
 import (
 	"bytes"
