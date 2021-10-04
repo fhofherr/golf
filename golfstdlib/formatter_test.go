@@ -1,9 +1,9 @@
-package golf_test
+package golfstdlib_test
 
 import (
 	"testing"
 
-	"github.com/fhofherr/golf"
+	"github.com/fhofherr/golf/golfstdlib"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -43,7 +43,7 @@ func TestPlainTextFormatter(t *testing.T) {
 		"missing value":         "key=value, other-key=error: missing value\n",
 		"odd number of kvs":     "key1=value1, key2=error: missing value\n",
 	}
-	exerciseFormatter(t, golf.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
+	exerciseFormatter(t, golfstdlib.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
 		assert.Equal(t, expected, actual)
 	})
 }
@@ -57,13 +57,13 @@ func TestJSONFormatter(t *testing.T) {
 		"missing value":         `{"key": "value", "other-key": "error: missing value"}`,
 		"odd number of kvs":     `{"key1": "value1", "key2": "error: missing value"}`,
 	}
-	exerciseFormatter(t, golf.JSONFormatter, expectations, func(t *testing.T, expected, actual string) {
+	exerciseFormatter(t, golfstdlib.JSONFormatter, expectations, func(t *testing.T, expected, actual string) {
 		assert.JSONEq(t, expected, actual)
 	})
 }
 
 func TestJSONFormatter_MarshallingError(t *testing.T) {
-	_, err := golf.JSONFormatter([]interface{}{"key", golf.JSONFormatter})
+	_, err := golfstdlib.JSONFormatter([]interface{}{"key", golfstdlib.JSONFormatter})
 	assert.Error(t, err)
 }
 
@@ -75,7 +75,7 @@ type formatterTest struct {
 type formatterAssertion func(*testing.T, string, string)
 
 func exerciseFormatter(
-	t *testing.T, formatter golf.Formatter, expectations map[string]string, assertion formatterAssertion,
+	t *testing.T, formatter golfstdlib.Formatter, expectations map[string]string, assertion formatterAssertion,
 ) {
 	for _, tt := range formatterTests {
 		tt := tt

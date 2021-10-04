@@ -49,6 +49,14 @@ logging, if the underlying logger adapter supports it.
 
 The following lists all breaking changes between versions.
 
+### [0.4.0]
+
+* Replaced `golf.NewStdlib` with `golfstdlib.NewLogger`. Made the `formatter`
+  argument of `NewLogger` optional.
+* Moved `golf.Formatter` to `golfstdlib.Formatter`
+* Moved `golf.PlainTextFormatter` to `golfstdlib.PlainTextFormatter`
+* Moved `golf.JSONFormatter` to `golfstdlib.JSONFormatter`
+
 ### [0.3.0]
 
 * Moved `log.Logger` to `golf.Logger`
@@ -65,4 +73,5 @@ Copyright © 2021 Ferdinand Hofherr
 
 Distributed under the MIT License.
 
+[0.4.0]: https://github.com/fhofherr/golf/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/fhofherr/golf/compare/v0.2.0...v0.3.0

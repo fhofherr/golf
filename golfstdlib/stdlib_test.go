@@ -1,4 +1,4 @@
-package golf_test
+package golfstdlib_test
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf"
+	"github.com/fhofherr/golf/golfstdlib"
 	"github.com/fhofherr/golf/internal/testsupport"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -15,7 +16,7 @@ import (
 func TestStdlibAdapter_Log(t *testing.T) {
 	tests := []struct {
 		name      string
-		formatter golf.Formatter
+		formatter golfstdlib.Formatter
 		kvs       []interface{}
 		expected  string
 	}{
@@ -26,7 +27,7 @@ func TestStdlibAdapter_Log(t *testing.T) {
 		},
 		{
 			name:      "JSON formatter",
-			formatter: golf.JSONFormatter,
+			formatter: golfstdlib.JSONFormatter,
 			kvs:       []interface{}{"key", "value"},
 			expected:  `{"key":"value"}` + "\n",
 		},
@@ -48,7 +49,7 @@ func TestStdlibAdapter_Log(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			w := &strings.Builder{}
-			logger := golf.NewStdlib(log.New(w, "", 0), tt.formatter)
+			logger := golfstdlib.NewLogger(log.New(w, "", 0), golfstdlib.WithFormatter(tt.formatter))
 			logger.Log(tt.kvs...)
 			assert.Equal(t, tt.expected, w.String())
 		})
@@ -59,7 +60,7 @@ func TestStdlibAdapter_Log_IOError(t *testing.T) {
 	w := testsupport.NewMockWriter(t)
 	w.On("Write", mock.Anything).Return(0, assert.AnError)
 
-	logger := golf.NewStdlib(log.New(w, "", 0), nil)
+	logger := golfstdlib.NewLogger(log.New(w, "", 0))
 	logger.Log("key", "value")
 
 	err := golf.Error(logger)
