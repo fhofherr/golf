@@ -1,5 +1,7 @@
 package golf
 
+import "github.com/fhofherr/golf/internal/golferr"
+
 // With tries to create a logger that always adds any values in kvs to the
 // arguments passed to Logger.Log.
 //
@@ -21,12 +23,12 @@ func With(logger Logger, kvs ...interface{}) Logger {
 	}
 	w, ok := logger.(wither)
 	if !ok {
-		Logf(logger, "%s: %T does not implement With", MsgUnsupported, logger)
+		Logf(logger, "%s: %T does not implement With", golferr.MsgUnsupported, logger)
 		return logger
 	}
 	l, ok := w.With(kvs...).(Logger)
 	if !ok {
-		Logf(logger, "%s: (%T).With did not return a Logger", MsgError, logger)
+		Logf(logger, "%s: (%T).With did not return a Logger", golferr.MsgError, logger)
 		return logger
 	}
 	return l

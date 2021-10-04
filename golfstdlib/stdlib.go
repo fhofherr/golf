@@ -4,7 +4,7 @@ import (
 	"log"
 	"sync"
 
-	"github.com/fhofherr/golf"
+	"github.com/fhofherr/golf/internal/golferr"
 )
 
 type options struct {
@@ -75,7 +75,7 @@ func (l *Logger) Err() error {
 func (l *Logger) handleError(err error) {
 	// Try to log the error. This may fail if the error occurred due to problems
 	// writing to the log stream.
-	l.logger.Printf("%s: stdlibAdapter: %v", golf.MsgError, err)
+	l.logger.Printf("%s: stdlibAdapter: %v", golferr.MsgError, err)
 
 	l.mu.Lock()
 	defer l.mu.Unlock()

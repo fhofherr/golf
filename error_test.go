@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf"
+	"github.com/fhofherr/golf/internal/golferr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,7 +13,7 @@ func TestError_NoErrMethod(t *testing.T) {
 	l := golf.NewMockLogger(t)
 
 	l.On(
-		"Log", fmt.Sprintf("%s: %T does not implement Err", golf.MsgUnsupported, l),
+		"Log", fmt.Sprintf("%s: %T does not implement Err", golferr.MsgUnsupported, l),
 	).Return()
 
 	err := golf.Error(l)

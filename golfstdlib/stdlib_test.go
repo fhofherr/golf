@@ -8,6 +8,7 @@ import (
 
 	"github.com/fhofherr/golf"
 	"github.com/fhofherr/golf/golfstdlib"
+	"github.com/fhofherr/golf/internal/golferr"
 	"github.com/fhofherr/golf/internal/testsupport"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -41,7 +42,7 @@ func TestStdlibAdapter_Log(t *testing.T) {
 			formatter: func(_ []interface{}) ([]byte, error) {
 				return nil, assert.AnError
 			},
-			expected: fmt.Sprintf("%s: stdlibAdapter: %v\n", golf.MsgError, assert.AnError),
+			expected: fmt.Sprintf("%s: stdlibAdapter: %v\n", golferr.MsgError, assert.AnError),
 		},
 	}
 
