@@ -31,6 +31,11 @@ func TestStdlibAdapter_Log(t *testing.T) {
 			expected:  `{"key":"value"}` + "\n",
 		},
 		{
+			name:     "single value default formatter",
+			kvs:      []interface{}{"just some message"},
+			expected: "just some message\n",
+		},
+		{
 			name: "Formatter error",
 			formatter: func(_ []interface{}) ([]byte, error) {
 				return nil, assert.AnError
