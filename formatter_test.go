@@ -13,6 +13,10 @@ var formatterTests = []formatterTest{
 		kvs:  []interface{}{},
 	},
 	{
+		name: "single value",
+		kvs:  []interface{}{"just a message"},
+	},
+	{
 		name: "single key value pair",
 		kvs:  []interface{}{"key", "value"},
 	},
@@ -22,7 +26,7 @@ var formatterTests = []formatterTest{
 	},
 	{
 		name: "missing value",
-		kvs:  []interface{}{"key"},
+		kvs:  []interface{}{"key", "value", "other-key"},
 	},
 	{
 		name: "odd number of kvs",
@@ -33,9 +37,10 @@ var formatterTests = []formatterTest{
 func TestPlainTextFormatter(t *testing.T) {
 	expectations := map[string]string{
 		"empty kvs":             "",
+		"single value":          "just a message",
 		"single key value pair": "key=value\n",
 		"two key value pairs":   "key1=value1, key2=value2\n",
-		"missing value":         "key=error: missing value\n",
+		"missing value":         "key=value, other-key=error: missing value\n",
 		"odd number of kvs":     "key1=value1, key2=error: missing value\n",
 	}
 	exerciseFormatter(t, golf.PlainTextFormatter, expectations, func(t *testing.T, expected, actual string) {
@@ -46,9 +51,10 @@ func TestPlainTextFormatter(t *testing.T) {
 func TestJSONFormatter(t *testing.T) {
 	expectations := map[string]string{
 		"empty kvs":             "{}",
+		"single value":          `{"message": "just a message"}`,
 		"single key value pair": `{"key": "value"}`,
 		"two key value pairs":   `{"key1": "value1", "key2": "value2"}`,
-		"missing value":         `{"key": "error: missing value"}`,
+		"missing value":         `{"key": "value", "other-key": "error: missing value"}`,
 		"odd number of kvs":     `{"key1": "value1", "key2": "error: missing value"}`,
 	}
 	exerciseFormatter(t, golf.JSONFormatter, expectations, func(t *testing.T, expected, actual string) {
