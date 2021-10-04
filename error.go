@@ -1,5 +1,7 @@
 package golf
 
+import "github.com/fhofherr/golf/internal/golferr"
+
 // Error obtains an error that may have occurred during logging.
 //
 // In order to support this feature logger must implement the following method:
@@ -11,7 +13,7 @@ package golf
 func Error(logger Logger) error {
 	e, ok := logger.(errorer)
 	if !ok {
-		Logf(logger, "%s: %T does not implement Err", MsgUnsupported, logger)
+		Logf(logger, "%s: %T does not implement Err", golferr.MsgUnsupported, logger)
 		return nil
 	}
 	return e.Err()

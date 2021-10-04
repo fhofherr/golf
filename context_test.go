@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/fhofherr/golf"
+	"github.com/fhofherr/golf/internal/golferr"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +18,7 @@ func TestWith_NoWithMethod(t *testing.T) {
 
 	logger.On(
 		"Log",
-		fmt.Sprintf("%s: %T does not implement With", golf.MsgUnsupported, logger),
+		fmt.Sprintf("%s: %T does not implement With", golferr.MsgUnsupported, logger),
 	).Return()
 
 	actual := golf.With(logger, "key", "value")
@@ -45,7 +46,7 @@ func TestWith_CallWithMethod(t *testing.T) {
 			prepare: func(t *testing.T, tt *testCase) {
 				tt.wither.On("With", tt.args...).Return(struct{}{})
 				tt.wither.On(
-					"Log", fmt.Sprintf("%s: (%T).With did not return a Logger", golf.MsgError, tt.wither),
+					"Log", fmt.Sprintf("%s: (%T).With did not return a Logger", golferr.MsgError, tt.wither),
 				).Return(struct{}{})
 			},
 			assert: func(t *testing.T, tt *testCase) {
